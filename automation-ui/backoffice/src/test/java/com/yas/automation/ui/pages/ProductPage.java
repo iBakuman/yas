@@ -22,6 +22,7 @@ import java.time.Duration;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
+import java.util.function.Supplier;
 
 @Component
 public class ProductPage extends BasePage {
@@ -67,7 +68,6 @@ public class ProductPage extends BasePage {
 
     public void uploadProductImg(ProductForm productForm) {
         scrollTo(productForm.getProductImgNav());
-        this.wait(Duration.ofSeconds(2));
         productForm.getProductImgNav().click();
 
         inputDelegateService.setInputValue(InputType.FILE, productForm.getImage(), DUMP_FILE_PATH);
@@ -184,36 +184,39 @@ public class ProductPage extends BasePage {
      */
     public boolean isNewProductShow(String newProductName) {
         final WebDriver chromeDriver = webDriverFactory.getChromeDriver();
-
         WebElement paginationBar = getWebElementBy(
                 chromeDriver,
                 How.CLASS_NAME,
                 "pagination-container"
         );
-        List<WebElement> pageItems = paginationBar.findElements(By.tagName("li"));
+        if (paginationBar.isDisplayed()) {
+            List<WebElement> pageItems = paginationBar.findElements(By.tagName("li"));
 
-        // pageItems.size() - 2 >> is to skip "Next" link
-        /*
-         * for example: 1 2 3 ... 12 Next
-         * >> try to get '12'
-         */
-        int totalPage = pageItems.isEmpty() ? 0 : Integer.parseInt(pageItems.get(pageItems.size() - 2).getText());
-        final String baseProductItemXPath = "//*/table/tbody/tr[%s]/td[2]";
-        int currentPage = 1;
-        while (currentPage < totalPage) {
-            // check all rows in table
-            for (int i = 1; i < NUM_OF_TABLE_ROW; i++) {
-                WebElement productName = getWebElementBy(
-                        chromeDriver,
-                        How.XPATH,
-                        baseProductItemXPath.formatted(i)
-                );
-                if (Objects.equals(newProductName, productName.getText())) {
-                    return true;
+            // pageItems.size() - 2 >> is to skip "Next" link
+            /*
+             * for example: 1 2 3 ... 12 Next
+             * >> try to get '12'
+             */
+            if (!pageItems.isEmpty()) {
+                int totalPage = pageItems.isEmpty() ? 0 : Integer.parseInt(pageItems.get(pageItems.size() - 2).getText());
+                final String baseProductItemXPath = "//*/table/tbody/tr[%s]/td[2]";
+                int currentPage = 1;
+                while (currentPage < totalPage) {
+                    // check all rows in table
+                    for (int i = 1; i < NUM_OF_TABLE_ROW; i++) {
+                        WebElement productName = getWebElementBy(
+                                chromeDriver,
+                                How.XPATH,
+                                baseProductItemXPath.formatted(i)
+                        );
+                        if (Objects.equals(newProductName, productName.getText())) {
+                            return true;
+                        }
+                    }
+                    currentPage++;
+                    getWebElementBy(chromeDriver, How.LINK_TEXT, String.valueOf(currentPage)).click(); // next page
                 }
             }
-            currentPage++;
-            getWebElementBy(chromeDriver, How.LINK_TEXT, String.valueOf(currentPage)).click(); // next page
         }
         return false;
     }
@@ -226,7 +229,11 @@ public class ProductPage extends BasePage {
     }
 
     public void clickToEditProductBtn() {
-        this.wait(Duration.ofSeconds(1));
+        Supplier<Boolean> checkData = () -> {
+            return getAllRowsInTable().isEmpty();
+        };
+        this.waitWithRetry(Duration.ofSeconds(1), checkData);
+
         List<WebElement> rows = getAllRowsInTable();
         if (!rows.isEmpty()) {
             WebElement editBtn = rows.getFirst().findElement(By.xpath("//a[contains(@href, '/catalog/products/') and contains(@href, '/edit')]/button"));
@@ -240,7 +247,11 @@ public class ProductPage extends BasePage {
     }
 
     public void clickToDeleteProductBtn() {
-        this.wait(Duration.ofSeconds(1));
+        Supplier<Boolean> checkData = () -> {
+            return getAllRowsInTable().isEmpty();
+        };
+        this.waitWithRetry(Duration.ofSeconds(1), checkData);
+
         List<WebElement> rows = getAllRowsInTable();
         if (!rows.isEmpty()) {
             WebElement deleteBtn = rows.getFirst().findElement(By.xpath("//*[@id=\"Layout_main__c1pHS\"]/table/tbody/tr[1]/td[7]/div/button"));
@@ -259,7 +270,4 @@ public class ProductPage extends BasePage {
         deleteBtn.click();
     }
 
-    public String getProductName() {
-        return productName;
-    }
 }
