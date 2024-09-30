@@ -24,7 +24,7 @@ import java.util.function.Supplier;
  */
 @Getter
 public class BasePage {
-
+    public static final int MAX_RETRIES = 5;
     private final WebDriverFactory webDriverFactory;
 
     public BasePage(WebDriverFactory webDriverFactory) {
@@ -41,10 +41,9 @@ public class BasePage {
 
     public void waitWithRetry(Duration duration, Supplier<Boolean> booleanSupplier) {
         int attempts = 0;
-        int maxRetries = 5;
 
         // Keep checking the supplier until it returns false or max retries are reached
-        while (attempts < maxRetries) {
+        while (attempts < MAX_RETRIES) {
             // If the condition returns false, stop retrying
             if (!booleanSupplier.get()) {
                 System.out.println("Condition met on attempt " + (attempts + 1));
