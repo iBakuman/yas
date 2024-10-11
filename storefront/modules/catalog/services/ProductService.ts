@@ -53,7 +53,12 @@ export async function getRelatedProductsByProductId(productId: number): Promise<
     },
   });
   if (res.status >= 200 && res.status < 300) return res.json();
-  return Promise.reject(res);
+  return res.json().then((errorData) => {
+    const error = new Error('HTTP error: ' + res.statusText);
+    error.status = res.status;
+    error.data = errorData; // Attach the response data for debugging
+    return Promise.reject(error);
+  });
 }
 
 export async function getSimilarProductsByProductId(productId: number): Promise<SimilarProduct[]> {
