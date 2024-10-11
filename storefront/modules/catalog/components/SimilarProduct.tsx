@@ -10,7 +10,7 @@ type SimilarProductProps = {
   productId: number;
 };
 
-const SimilarProduct = ({ productId }: SimilarProductProps) => {
+const SimilarProduct = ({ productId }: Readonly<SimilarProductProps>) => {
   const [products, setProducts] = useState<ProductThumbnail[]>([]);
 
   useEffect(() => {

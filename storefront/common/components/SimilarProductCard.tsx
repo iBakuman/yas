@@ -1,8 +1,6 @@
 import clsx from 'clsx';
 import Link from 'next/link';
-import { useLayoutEffect, useState } from 'react';
 
-import { getMediaById } from '@/modules/media/services/MediaService';
 import { ProductThumbnail } from 'modules/catalog/models/ProductThumbnail';
 import { formatPrice } from 'utils/formatPrice';
 import ImageWithFallBack from './ImageWithFallback';
@@ -15,7 +13,7 @@ export interface Props {
   className?: string[];
 }
 
-export default function SimilarProductCard({ product, className, thumbnailUrl }: Props) {
+export default function SimilarProductCard({ product, className, thumbnailUrl }: Readonly<Props>) {
   return (
     <Link
       className={clsx(
@@ -26,7 +24,7 @@ export default function SimilarProductCard({ product, className, thumbnailUrl }:
     >
       <div className={styles['product-card']}>
         <div className={styles['image-wrapper']}>
-          <ImageWithFallBack src={thumbnailUrl || ''} alt={product.name} />
+          <ImageWithFallBack src={thumbnailUrl ?? ''} alt={product.name} />
         </div>
         <div className={styles['info-wrapper']}>
           <h3 className={styles['prod-name']}>{product.name}</h3>
