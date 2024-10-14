@@ -10,7 +10,7 @@ type SimilarProductProps = {
   productId: number;
 };
 
-const SimilarProduct = ({ productId }: SimilarProductProps) => {
+const SimilarProducts = ({ productId }: SimilarProductProps) => {
   const [products, setProducts] = useState<ProductThumbnail[]>([]);
 
   useEffect(() => {
@@ -54,4 +54,4 @@ const SimilarProduct = ({ productId }: SimilarProductProps) => {
   );
 };
 
-export default SimilarProduct;
+export default SimilarProducts;

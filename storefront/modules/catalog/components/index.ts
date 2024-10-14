@@ -1,6 +1,6 @@
 import DetailHeader from './DetailHeader';
 import ProductDetails from './ProductDetails';
 import RelatedProduct from './RelatedProducts';
-import SimilarProduct from './SimilarProduct';
+import SimilarProducts from './SimilarProducts';
 
-export { DetailHeader, ProductDetails, RelatedProduct, SimilarProduct };
+export { DetailHeader, ProductDetails, RelatedProduct, SimilarProducts };
