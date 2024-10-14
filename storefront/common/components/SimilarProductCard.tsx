@@ -13,7 +13,11 @@ export interface SimilarProductCardProps {
   className?: string[];
 }
 
-export default function SimilarProductCard({ product, className, thumbnailUrl }: Readonly<SimilarProductCardProps>) {
+export default function SimilarProductCard({
+  product,
+  className,
+  thumbnailUrl,
+}: Readonly<SimilarProductCardProps>) {
   return (
     <Link
       className={clsx(
