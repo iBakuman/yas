@@ -15,11 +15,7 @@ interface ProductCardBaseProps {
   className?: string[];
 }
 
-const ProductCardBase: React.FC<ProductCardBaseProps> = ({
-  product,
-  thumbnailUrl,
-  className,
-}) => {
+const ProductCardBase: React.FC<ProductCardBaseProps> = ({ product, thumbnailUrl, className }) => {
   return (
     <Link
       className={clsx(

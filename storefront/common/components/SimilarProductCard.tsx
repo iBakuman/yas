@@ -12,5 +12,7 @@ export default function SimilarProductCard({
   className,
   thumbnailUrl,
 }: Readonly<SimilarProductCardProps>) {
-  return <ProductCardBase product={product} thumbnailUrl={thumbnailUrl ?? ''} className={className} />;
+  return (
+    <ProductCardBase product={product} thumbnailUrl={thumbnailUrl ?? ''} className={className} />
+  );
 }
