@@ -1,19 +1,19 @@
 import clsx from 'clsx';
 import Link from 'next/link';
 
-import { ProductThumbnail } from 'modules/catalog/models/ProductThumbnail';
+import { SimilarProduct } from 'modules/catalog/models/SimilarProduct';
 import { formatPrice } from 'utils/formatPrice';
 import ImageWithFallBack from './ImageWithFallback';
 
 import styles from 'styles/ProductCard.module.css';
 
-export interface Props {
-  product: ProductThumbnail;
+export interface SimilarProductCardProps {
+  product: SimilarProduct;
   thumbnailUrl?: string;
   className?: string[];
 }
 
-export default function SimilarProductCard({ product, className, thumbnailUrl }: Readonly<Props>) {
+export default function SimilarProductCard({ product, className, thumbnailUrl }: Readonly<SimilarProductCardProps>) {
   return (
     <Link
       className={clsx(
