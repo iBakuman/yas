@@ -2,12 +2,10 @@ package com.yas.commonlibrary.kafka.cdc.message;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
-@Getter
-@Setter
+@lombok.Getter
+@lombok.Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
