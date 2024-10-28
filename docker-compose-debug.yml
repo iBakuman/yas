@@ -36,7 +36,6 @@ services:
     networks:
       - yas-network
   backoffice:
-    build: ./backoffice-bff
     image: ibakuman/java-debugger
     entrypoint: [ "./wait-for-it.sh", "identity:80", "--timeout=300", "--", "java", "-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005", "-jar", "/app.jar" ]
     environment:
@@ -69,9 +68,8 @@ services:
     networks:
       - yas-network
   storefront:
-    build: ./storefront-bff
-    image: ghcr.io/nashtech-garage/yas-storefront-bff:latest
-    entrypoint: [ "./wait-for-it.sh", "identity:80", "--timeout=300", "--", "java", "-jar", "/app.jar" ]
+    image: ibakuman/java-debugger
+    entrypoint: [ "./wait-for-it.sh", "identity:80", "--timeout=300", "--", "java", "-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005", "-jar", "/app.jar" ]
     environment:
       - SPRING_PROFILES_ACTIVE=prod
       - YAS_SERVICES_CUSTOMER
@@ -100,6 +98,7 @@ services:
       - OTEL_JAVAAGENT_ENABLED
       - OTEL_JAVAAGENT_DEBUG
     volumes:
+      - ./storefront-bff/target/storefront-bff-1.0-SNAPSHOT.jar:/app.jar
       - ./docker/libs/opentelemetry-javaagent.jar:/opentelemetry-javaagent.jar
       - ./deployment/app-config:/app-config
     networks:
