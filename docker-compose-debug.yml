@@ -521,6 +521,7 @@ services:
   postgres:
     image: debezium/postgres:15-alpine
     build: ./docker/postgres
+    platform: linux/amd64
     hostname: ${POSTGRES_HOST}
     ports:
       - "${POSTGRES_PORT}:${POSTGRES_PORT}"
@@ -545,11 +546,12 @@ services:
       - yas-network
   zookeeper:
     image: debezium/zookeeper:2.2
+    platform: linux/amd64
     restart: always
     ports:
-      - 2181:2181
-      - 2888:2888
-      - 3888:3888
+      - "2181:2181"
+      - "2888:2888"
+      - "3888:3888"
     networks:
       - yas-network
   kafka:
@@ -559,7 +561,7 @@ services:
       - zookeeper
     ports:
       - ${KAFKA_SERVICE_PORT}:${KAFKA_SERVICE_PORT}
-      - 29092:29092
+      - "29092:29092"
     environment:
       - KAFKA_BROKER_ID
       - KAFKA_ZOOKEEPER_CONNECT
@@ -571,6 +573,7 @@ services:
       - yas-network
   kafka-connect:
     image: debezium/connect:2.2
+    platform: linux/amd64
     restart: always
     ports:
       - 8083:8083
@@ -620,7 +623,7 @@ networks:
   yas-network:
     driver: bridge
     name: yas-network
-    external: true
+#    external: true
 
 volumes:
   postgres:
